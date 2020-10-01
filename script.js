@@ -12,8 +12,8 @@ const getLocation = (position) => {
     .then(data => {
       console.log(data);
       city.innerHTML = data.name;
-      ctemp.innerHTML = data.main.temp;
-      ftemp.innerHTML = data.main.temp * 9 / 5 + 32;
+      ctemp.innerHTML = data.main.temp + ' C';
+      ftemp.innerHTML = data.main.temp * 9 / 5 + 32 + ' F';
     });
 }
 
