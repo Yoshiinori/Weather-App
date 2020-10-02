@@ -1,39 +1,39 @@
 const apiKey = '7f90da554b9e38ab6f360f884e8542e3'
+const endPoint = 'https://api.openweathermap.org/data/2.5/weather'
 
 const city = document.querySelector('.city')
 const temp = document.querySelector('.temp')
 const tempBtn = document.querySelector('.temp-btn')
 
-const getLocation = (position) => {
-  let lat = position.coords.latitude;
-  let long = position.coords.longitude;
-  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${apiKey}&units=metric`)
+const getWeather = async ({ coords }) => {
+  let lat = coords.latitude;
+  let long = coords.longitude;
+  let data = await fetch(endPoint + `?lat=${lat}&lon=${long}&appid=${apiKey}&units=metric`)
     .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      city.innerHTML = data.name;
-      let celcius = data.main.temp + ' C';
-      let farenheight = data.main.temp * 9 / 5 + 32 + ' F';
-      temp.innerHTML = celcius;
-    });
-}
-
-let displayTemp = 'c';
-
-tempBtn.addEventListener('click', () => {
-  if (displayTemp = 'c') {
-    temp.innerHTML = farenheight;
-    tempBtn.innerHTML = 'Switch to Farenheight'
-    let displayTemp = 'f';
-  } else if (displayTemp = 'f') {
-    temp.innerHTML = celcius;
-    tempBtn.innerHTML = 'Switch to Celcius';
-    let displayTemp = 'c';
+    .catch(console.error)
+  window.weather = {
+    city: data.name,
+    selected: 'C',
+    units: [
+      { type: 'F', value: Math.floor(data.main.temp) },
+      { type: 'C', value: Math.floor(data.main.temp * 9 / 5 + 32) }
+    ]
   }
-});
-
-const noLocation = (err) => {
-  console.error(err)
+  city.innerHTML = data.name;
+  temp.innerHTML = `${Math.floor(data.main.temp)} C`;
 }
 
-navigator.geolocation.getCurrentPosition(getLocation, noLocation)
+const toggle = () => {
+  let { units, selected } = weather;
+  if (selected === 'F') {
+    temp.innerHTML = `${units.find(u => u.type === 'C').value} C`;
+    tempBtn.innerHTML = 'Switch to Fahrenheit';
+    weather.selected = 'C';
+  } else if (selected === 'C') {
+    temp.innerHTML = `${units.find(u => u.type === 'F').value} F`;
+    tempBtn.innerHTML = 'Switch to Celsius';
+    weather.selected = 'F';
+  }
+}
+
+navigator.geolocation.getCurrentPosition(getWeather, console.error)
