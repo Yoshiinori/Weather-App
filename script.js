@@ -1,8 +1,8 @@
 const apiKey = '7f90da554b9e38ab6f360f884e8542e3'
 
 const city = document.querySelector('.city')
-const ctemp = document.querySelector('.ctemp')
-const ftemp = document.querySelector('.ftemp')
+const temp = document.querySelector('.temp')
+const tempBtn = document.querySelector('.temp-btn')
 
 const getLocation = (position) => {
   let lat = position.coords.latitude;
@@ -12,10 +12,25 @@ const getLocation = (position) => {
     .then(data => {
       console.log(data);
       city.innerHTML = data.name;
-      ctemp.innerHTML = data.main.temp + ' C';
-      ftemp.innerHTML = data.main.temp * 9 / 5 + 32 + ' F';
+      let celcius = data.main.temp + ' C';
+      let farenheight = data.main.temp * 9 / 5 + 32 + ' F';
+      temp.innerHTML = celcius;
     });
 }
+
+let displayTemp = 'c';
+
+tempBtn.addEventListener('click', () => {
+  if (displayTemp = 'c') {
+    temp.innerHTML = farenheight;
+    tempBtn.innerHTML = 'Switch to Farenheight'
+    let displayTemp = 'f';
+  } else if (displayTemp = 'f') {
+    temp.innerHTML = celcius;
+    tempBtn.innerHTML = 'Switch to Celcius';
+    let displayTemp = 'c';
+  }
+});
 
 const noLocation = (err) => {
   console.error(err)
