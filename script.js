@@ -27,7 +27,7 @@ const toggle = () => {
   let { units, selected } = weather;
   if (selected === 'F') {
     temp.innerHTML = `${units.find(u => u.type === 'C').value} C`;
-    tempBtn.innerHTML = 'Switch to Farenheight';
+    tempBtn.innerHTML = 'Switch to Fahrenheit';
     weather.selected = 'C';
   } else if (selected === 'C') {
     temp.innerHTML = `${units.find(u => u.type === 'F').value} F`;
